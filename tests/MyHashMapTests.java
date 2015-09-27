@@ -39,7 +39,7 @@ public class MyHashMapTests {
 	@Test
 	public void testInitial1() {
 		map = new MyHashMap();
-		assertEquals("Test initial size", 0, map.getSize());
+		assertEquals("Test initial size", 0, map.size());
 		assertEquals("Test initial map", 11, map.getArray().length);
 	}
 	@Test
@@ -49,12 +49,12 @@ public class MyHashMapTests {
 		map.hashmap[1].add(new AbstractMap.SimpleEntry(1,"1"));
 		map.hashmap[2].add(new AbstractMap.SimpleEntry(2,"2"));
 		map.size = 3;
-		assertEquals("", 3, map.getSize());
+		assertEquals("", 3, map.size());
 		assertEquals("", "0", map.hashmap[0].get(0).getValue());
 		assertEquals("", "1", map.hashmap[1].get(0).getValue());
 		assertEquals("", "2", map.hashmap[2].get(0).getValue());
 		map.clear();
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		assertEquals("", new ArrayList<Node>(), map.hashmap[0]);
 		assertEquals("", new ArrayList<Node>(), map.hashmap[1]);
 		assertEquals("", new ArrayList<Node>(), map.hashmap[2]);		
@@ -63,7 +63,7 @@ public class MyHashMapTests {
 	public void testGetSize1() {
 		map = new MyHashMap();
 		map.size = 3;
-		assertEquals("", 3, map.getSize());		
+		assertEquals("", 3, map.size());		
 	}
 	@Test
 	public void testGetArray1() {
@@ -209,45 +209,45 @@ public class MyHashMapTests {
 	public void testResize1() {
 		assertEquals("", 11, map.getCapacity());
 		assertEquals("", 11, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		map.resize();
 		assertEquals("", 23, map.getCapacity());
 		assertEquals("", 23, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 	}
 	
 	@Test
 	public void testResize2() {
 		assertEquals("", 11, map.getCapacity());
 		assertEquals("", 11, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		map.resize();
 		assertEquals("", 23, map.getCapacity());
 		assertEquals("", 23, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		map.resize();
 		assertEquals("", 47, map.getCapacity());
 		assertEquals("", 47, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		map.resize();
 		assertEquals("", 97, map.getCapacity());
 		assertEquals("", 97, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		map.resize();
 		assertEquals("", 197, map.getCapacity());
 		assertEquals("", 197, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		map.resize();
 		assertEquals("", 397, map.getCapacity());
 		assertEquals("", 397, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 	}
 	
 	@Test
 	public void testResize3() {
 		assertEquals("", 11, map.getCapacity());
 		assertEquals("", 11, map.hashmap.length);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		map.put(node1.getId(), node1);
 		map.put(node1.getId(), node1);
 		map.put(node1.getId(), node1);
@@ -263,7 +263,7 @@ public class MyHashMapTests {
 		//map.toString();
 		assertEquals("", 11, map.getCapacity());
 		assertEquals("", 11, map.hashmap.length);
-		assertEquals("", 1, map.getSize());
+		assertEquals("", 1, map.size());
 	}
 	@Test
 	public void testPut1() {
@@ -272,7 +272,7 @@ public class MyHashMapTests {
 		map.put(node2.getId(), node2);
 		map.put(node3.getId(), node3);
 		//map.toString();
-		assertEquals("", 3, map.getSize());
+		assertEquals("", 3, map.size());
 		assertEquals("", 11, map.getCapacity());
 	}
 	@Test
@@ -316,21 +316,21 @@ public class MyHashMapTests {
 		assertEquals("", null, temp1);
 		assertEquals("", null, temp2);
 		assertEquals("", null, temp3);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		assertEquals("", 0, map.size);		
 	}
 	@Test
 	public void testRemove1() {
 		Node temp = (Node) map.remove(null);
 		assertEquals("", null, temp);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		assertEquals("", 0, map.size);
 		assertEquals("", 11, map.getCapacity());
 	}
 	public void testRemove2() {
 		Node temp = (Node) map.remove("1");
 		assertEquals("", null, temp);
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		assertEquals("", 0, map.size);
 		assertEquals("", 11, map.getCapacity());
 	}
@@ -339,12 +339,12 @@ public class MyHashMapTests {
 		map.put(node1.getId(), node1);
 		map.put(node2.getId(), node2);
 		map.put(node3.getId(), node3);
-		assertEquals("", 3, map.getSize());
+		assertEquals("", 3, map.size());
 		assertEquals("", 11, map.getCapacity());
 		map.remove(node1.getId());
 		map.remove(node2.getId());
 		map.remove(node3.getId());	
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		assertEquals("", 0, map.size);
 		assertEquals("", 11, map.getCapacity());
 		
@@ -361,12 +361,12 @@ public class MyHashMapTests {
 		map.put(node1.getId(), node1);
 		map.put(node2.getId(), node2);
 		map.put(node3.getId(), node3);
-		assertEquals("", 3, map.getSize());
+		assertEquals("", 3, map.size());
 		assertEquals("", 11, map.getCapacity());
 		
 		map.remove(node1.getId());
 		map.remove(node3.getId());
-		assertEquals("", 1, map.getSize());
+		assertEquals("", 1, map.size());
 		assertEquals("", 1, map.size);
 		assertEquals("", 11, map.getCapacity());
 		
@@ -378,7 +378,7 @@ public class MyHashMapTests {
 		assertEquals("", null, temp3);
 		
 		map.remove(node1.getId());
-		assertEquals("", 1, map.getSize());
+		assertEquals("", 1, map.size());
 		assertEquals("", 1, map.size);
 		assertEquals("", 11, map.getCapacity());
 		//map.toString();
@@ -388,7 +388,7 @@ public class MyHashMapTests {
 		map.put(node1.getId(), node1);
 		map.put(node2.getId(), node2);
 		map.put(node3.getId(), node3);
-		assertEquals("", 3, map.getSize());
+		assertEquals("", 3, map.size());
 		assertEquals("", 11, map.getCapacity());
 		boolean temp1 = map.containsKey(node1.getId());
 		boolean temp2 = map.containsKey(node2.getId());
@@ -400,7 +400,7 @@ public class MyHashMapTests {
 		map.remove(node1.getId());
 		map.remove(node2.getId());
 		map.remove(node3.getId());	
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		assertEquals("", 0, map.size);
 		assertEquals("", 11, map.getCapacity());
 		
@@ -417,7 +417,7 @@ public class MyHashMapTests {
 		map.put(node1.getId(), node1);
 		map.put(node2.getId(), node2);
 		map.put(node3.getId(), node3);
-		assertEquals("", 3, map.getSize());
+		assertEquals("", 3, map.size());
 		assertEquals("", 11, map.getCapacity());
 		
 		boolean temp1 = map.containsValue(node1);
@@ -430,7 +430,7 @@ public class MyHashMapTests {
 		map.remove(node1.getId());
 		map.remove(node2.getId());
 		map.remove(node3.getId());	
-		assertEquals("", 0, map.getSize());
+		assertEquals("", 0, map.size());
 		assertEquals("", 0, map.size);
 		assertEquals("", 11, map.getCapacity());
 		
@@ -442,25 +442,25 @@ public class MyHashMapTests {
 		assertEquals("", null, ttemp2);
 		assertEquals("", null, ttemp3);
 	}	
-//	@Test
-//	public void testSetMethods1() {
-//		HashMap<Integer, Node> table = new HashMap<Integer, Node>();
-//		table.put(node1.getId(), node1);
-//		table.put(node2.getId(), node2);
-//		//table.put(null, 12);
-//		map.put(node1.getId(), node1);
-//		map.put(node2.getId(), node2);		
-//		boolean answer = table.containsValue(node1);
-//
-//		System.out.println("    struct: " + table);
-//		//System.out.println("  mystruct: " + map);
-//		System.out.println("  entryset: " + table.entrySet());
-//		System.out.println("myentryset: " + map.entrySet());
-//		System.out.println("    keyset: " + table.keySet());
-//		System.out.println("  mykeyset: " + map.keySet());
-//		System.out.println("    values: " + table.values());
-//		System.out.println("  myvalues: " + map.values());
-//	}
+	//@Test
+	//public void testSetMethods1() {
+	//	HashMap<Integer, Node> table = new HashMap<Integer, Node>();
+	//	table.put(node1.getId(), node1);
+	//	table.put(node2.getId(), node2);
+	//	//table.put(null, 12);
+	//	map.put(node1.getId(), node1);
+	//	map.put(node2.getId(), node2);		
+	//	boolean answer = table.containsValue(node1);
+	//
+	//	System.out.println("    struct: " + table);
+	//	System.out.println("  mystruct: " + map);
+	//	System.out.println("  entryset: " + table.entrySet());
+	//	System.out.println("myentryset: " + map.entrySet());
+	//	System.out.println("    keyset: " + table.keySet());
+	//	System.out.println("  mykeyset: " + map.keySet());
+	//	System.out.println("    values: " + table.values());
+	//	System.out.println("  myvalues: " + map.values());
+	//}
 	@Test
 	public void testKeySet() {	
 		map.put(node1.getId(), node1);

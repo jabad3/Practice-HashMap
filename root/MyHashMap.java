@@ -1,14 +1,13 @@
 package root;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import math.Primes;
 
-public class MyHashMap {
+public class MyHashMap implements Map{
 	public ArrayList<Map.Entry<?,?>>[] hashmap;
 	public int capacity = 11;
 	public int size;
@@ -51,6 +50,7 @@ public class MyHashMap {
 	 * @param value the object that will get mapped
 	 * @return if the already exists, the old Value is returned
 	 */
+	@Override
 	public Object put(Object key, Object value) {
 		//0. Safety checks.
 		if(key==null) return null;
@@ -87,6 +87,7 @@ public class MyHashMap {
 	 * @param key the key for the object that will be removed
 	 * @return the removed object, or null if it does not exist.
 	 */
+	@Override
 	public Object remove(Object key) {
 		//0. Safety checks.
 		if(key==null) return null;
@@ -117,6 +118,7 @@ public class MyHashMap {
 	 * @param key the Key object used to search the <code>Map</code>
 	 * @return the Value object mapped to Key, or null if it does not exist
 	 */
+	@Override
 	public Object get(Object key) {
 		//0. Safety checks.
 		if(key==null) return null;
@@ -143,6 +145,7 @@ public class MyHashMap {
 	 * @param key the Key object used to search the <code>Map</code>
 	 * @return a boolean stating if the Key maps to a Value object
 	 */
+	@Override
 	public boolean containsKey(Object key) {
 		//0. Safety checks.
 		if(key==null) return false;
@@ -171,6 +174,7 @@ public class MyHashMap {
 	 * @param value the Value object that is searched in the <code>Map</code>
 	 * @return a boolean stating if the Value object is mapped
 	 */
+	@Override
 	public boolean containsValue(Object value) {
 		//0. No safety checks
 		
@@ -193,6 +197,7 @@ public class MyHashMap {
 	 * Returns a set of all the keys for entries in the map.
 	 * @return a set containing all the existing keys
 	 */
+	@Override
 	public Set keySet() {
 		HashSet set = new HashSet();
 		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
@@ -207,6 +212,7 @@ public class MyHashMap {
 	 * Returns a set containing all the entries as <code>Map.Entries</code>.
 	 * @return a set containing all existing <code>Map.Entries</code>
 	 */
+	@Override
 	public Set entrySet() {
 		HashSet set = new HashSet();
 		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
@@ -222,6 +228,7 @@ public class MyHashMap {
 	 * Returns a set of all the entries in a map.
 	 * @return a set containing all existing entries
 	 */
+	@Override
 	public Collection values() {
 		Collection set = new HashSet();
 		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
@@ -236,6 +243,7 @@ public class MyHashMap {
 	 * Adds all the entries from the given <code>Map</code> into this current map.
 	 * @param m the <code>Map</code> from which entries will be extracted
 	 */
+	@Override
 	public void putAll(Map m) {
 		Collection<Node> set = m.values();
 		for(Node node : set) {
@@ -310,6 +318,7 @@ public class MyHashMap {
 	 * Remove all entries from the map. The map's capacity remains unchanged so that if the map has been resized,
 	 * the map does not return back to its default size.
 	 */
+	@Override
 	public void clear() {
 		hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[this.capacity];
 		for(int i = 0; i<this.capacity; i++) {
@@ -325,7 +334,8 @@ public class MyHashMap {
 	 * Returns the number of entries in the map.
 	 * @return the number of entries in the map
 	 */
-	public int getSize() {
+	@Override
+	public int size() {
 		return this.size;
 	}
 	
@@ -342,6 +352,7 @@ public class MyHashMap {
 	 * greater than <code>0</code>.
 	 * @return a boolean that states if the map is empty
 	 */
+	@Override
 	public boolean isEmpty() {
 		return this.size==0;
 	}
@@ -359,7 +370,9 @@ public class MyHashMap {
 	 */
 	@Override
 	public String toString() {
-		System.out.println(Arrays.toString(hashmap));
-		return Arrays.toString(hashmap);
+		//System.out.println(Arrays.toString(hashmap));
+		//return Arrays.toString(hashmap);
+		return entrySet().toString();
 	}
+	//////
 }
