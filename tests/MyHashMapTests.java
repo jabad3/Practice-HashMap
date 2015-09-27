@@ -45,14 +45,14 @@ public class MyHashMapTests {
 	@Test
 	public void testClear1() {
 		map = new MyHashMap();
-		map.hashmap[0].add(new Node(0,"0"));
-		map.hashmap[1].add(new Node(1,"1"));
-		map.hashmap[2].add(new Node(2,"2"));
+		map.hashmap[0].add(new AbstractMap.SimpleEntry(0,"0"));
+		map.hashmap[1].add(new AbstractMap.SimpleEntry(1,"1"));
+		map.hashmap[2].add(new AbstractMap.SimpleEntry(2,"2"));
 		map.size = 3;
 		assertEquals("", 3, map.getSize());
-		assertEquals("", "0", ((Node) map.hashmap[0].get(0)).getData());
-		assertEquals("", "1", ((Node) map.hashmap[1].get(0)).getData());
-		assertEquals("", "2", ((Node) map.hashmap[2].get(0)).getData());
+		assertEquals("", "0", map.hashmap[0].get(0).getValue());
+		assertEquals("", "1", map.hashmap[1].get(0).getValue());
+		assertEquals("", "2", map.hashmap[2].get(0).getValue());
 		map.clear();
 		assertEquals("", 0, map.getSize());
 		assertEquals("", new ArrayList<Node>(), map.hashmap[0]);
