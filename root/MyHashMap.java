@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Set;
 import math.Primes;
 
-public class MyHashMap implements Map{
+public class MyHashMap implements Map<Object, Object>{
 	public ArrayList<Map.Entry<?,?>>[] hashmap;
 	public int capacity = 11;
 	public int size;
@@ -19,6 +19,7 @@ public class MyHashMap implements Map{
 	/**
 	 * Create a default <code>Map</code> with size capacity 11.
 	 */
+	@SuppressWarnings("unchecked")
 	public MyHashMap() {
 		this.hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[this.capacity];
 		for(int i = 0; i<this.capacity; i++) {
@@ -31,6 +32,7 @@ public class MyHashMap implements Map{
 	 * Creates a map with a given size capacity.
 	 * @param capacity an integer to determine initial capacity.
 	 */
+	@SuppressWarnings("unchecked")
 	public MyHashMap(int capacity) {
 		this.capacity = capacity;
 		this.hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[this.capacity];
@@ -73,7 +75,7 @@ public class MyHashMap implements Map{
 		}
 		
 		//4. Add the object to the map.
-		Map.Entry<?,?> node = new AbstractMap.SimpleEntry(key,value);
+		Map.Entry<?,?> node = new AbstractMap.SimpleEntry<Object, Object>(key,value);
 		hashmap[index].add(node);
 		size++;
 		
@@ -198,8 +200,8 @@ public class MyHashMap implements Map{
 	 * @return a set containing all the existing keys
 	 */
 	@Override
-	public Set keySet() {
-		HashSet set = new HashSet();
+	public Set<Object> keySet() {
+		Set<Object> set = new HashSet<Object>();
 		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
 			for(Map.Entry<?,?> node : arraylist) {
 				set.add(node.getKey());
@@ -213,11 +215,11 @@ public class MyHashMap implements Map{
 	 * @return a set containing all existing <code>Map.Entries</code>
 	 */
 	@Override
-	public Set entrySet() {
-		HashSet set = new HashSet();
+	public Set<Map.Entry<Object,Object>> entrySet() {
+		Set<Map.Entry<Object,Object>> set = new HashSet<Map.Entry<Object,Object>>();
 		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
 			for(Map.Entry<?,?> node : arraylist) {
-				Map.Entry<Integer, Node> entry = new AbstractMap.SimpleEntry(node.getKey(), node.getValue());
+				Map.Entry<Object, Object> entry = new AbstractMap.SimpleEntry<Object,Object>(node.getKey(), node.getValue());
 				set.add(entry);
 			}
 		}
@@ -229,11 +231,11 @@ public class MyHashMap implements Map{
 	 * @return a set containing all existing entries
 	 */
 	@Override
-	public Collection values() {
-		Collection set = new HashSet();
+	public Collection<Object> values() {
+		Collection<Object> set = new HashSet<Object>();
 		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
 			for(Map.Entry<?,?> node : arraylist) {
-				set.add(node);
+				set.add(node.getValue());
 			}
 		}
 		return set;
@@ -244,10 +246,11 @@ public class MyHashMap implements Map{
 	 * @param m the <code>Map</code> from which entries will be extracted
 	 */
 	@Override
-	public void putAll(Map m) {
-		Collection<Node> set = m.values();
-		for(Node node : set) {
-			this.put(node.getId(), node);
+	public void putAll(Map<?,?> m) {
+		Set<?> set = m.entrySet();
+		for(Object node : set) {
+			Map.Entry<?,?> temp = (Map.Entry<?,?>) node;
+			this.put(temp.getKey(), temp.getValue());
 			size++;
 		}
 	}
@@ -279,6 +282,7 @@ public class MyHashMap implements Map{
 		int newTableCapacity = Primes.findNextPrime(doubleTableCapacity);
 		
 		//2. Build a new bigger table.
+		@SuppressWarnings("unchecked")
 		ArrayList<Map.Entry<?,?>>[] newTable = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[newTableCapacity];
 		for(int i = 0; i<newTableCapacity; i++) {
 			newTable[i] = new ArrayList<Map.Entry<?,?>>();
@@ -305,6 +309,7 @@ public class MyHashMap implements Map{
 	/**
 	 * Reset the map to its original state, a map that is empty and with a capacity of 11.
 	 */
+	@SuppressWarnings("unchecked")
 	public void reset() {
 		hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[11];
 		for(int i = 0; i<11; i++) {
@@ -318,6 +323,7 @@ public class MyHashMap implements Map{
 	 * Remove all entries from the map. The map's capacity remains unchanged so that if the map has been resized,
 	 * the map does not return back to its default size.
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
 		hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[this.capacity];
@@ -374,5 +380,6 @@ public class MyHashMap implements Map{
 		//return Arrays.toString(hashmap);
 		return entrySet().toString();
 	}
-	//////
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
