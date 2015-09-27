@@ -1,10 +1,10 @@
 package root;
 import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
+import java.util.Collection;
+import java.util.ArrayList;
 import java.util.Set;
+import java.util.HashSet;
 import math.Primes;
 
 public class MyHashMap implements Map<Object, Object>{
@@ -14,7 +14,7 @@ public class MyHashMap implements Map<Object, Object>{
 	public double loadfactor = 0.5;
 	
 	//////////////////////////////
-	//constructors
+	//Constructors
 	//////////////////////////////
 	/**
 	 * Create a default <code>Map</code> with size capacity 11.
@@ -27,7 +27,7 @@ public class MyHashMap implements Map<Object, Object>{
 		}
 		this.size = 0;
 	}
-
+	
 	/**
 	 * Creates a map with a given size capacity.
 	 * @param capacity an integer to determine initial capacity.
@@ -42,8 +42,9 @@ public class MyHashMap implements Map<Object, Object>{
 		this.size = 0;
 	}
 	
+	
 	//////////////////////////////
-	//standard methods
+	//Standard methods
 	//////////////////////////////
 	/**
 	 * Insert a new entry into the map. The Value object is mapped to its Key. If the Key already exists,
@@ -61,9 +62,9 @@ public class MyHashMap implements Map<Object, Object>{
 		int index = this.getKeyIndex(key);
 		
 		//2. Check to see if object already exists.
-		Node oldMapping = null;
+		Object oldMapping = null;
 		if(this.containsKey(key)) {
-			oldMapping = (Node) this.get(key);
+			oldMapping = this.get(key);
 			ArrayList<Map.Entry<?,?>> bucket = hashmap[index];
 			bucket.remove(oldMapping);
 			size--;
@@ -192,8 +193,9 @@ public class MyHashMap implements Map<Object, Object>{
 		return flag;
 	}
 	
+	
 	//////////////////////////////
-	//extra methods
+	//Extra methods
 	//////////////////////////////
 	/**
 	 * Returns a set of all the keys for entries in the map.
@@ -255,8 +257,9 @@ public class MyHashMap implements Map<Object, Object>{
 		}
 	}
 	
+	
 	//////////////////////////////
-	//helper methods
+	//Helper methods
 	//////////////////////////////
 	/**
 	 * Compute the array index for a given key. This is done by calling <code>hashcode()</code> on the
@@ -333,8 +336,9 @@ public class MyHashMap implements Map<Object, Object>{
 		size = 0;
 	}
 	
+	
 	//////////////////////////////
-	//standard structure methods
+	//Standard structure methods
 	//////////////////////////////
 	/**
 	 * Returns the number of entries in the map.
@@ -381,5 +385,7 @@ public class MyHashMap implements Map<Object, Object>{
 		return entrySet().toString();
 	}
 	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

@@ -3,7 +3,7 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 
-import root.Node;
+import tests.Node;
 
 public class NodeTests {
 	static Node node1 = new Node(1, "1");
