@@ -22,9 +22,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public MyHashMap() {
 		this.capacity = 11;
 		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-//		for(int i = 0; i<this.capacity; i++) {
-//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-//		}
 		initializeBuckets();
 		this.size = 0;
 	}
@@ -36,9 +33,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public MyHashMap(int capacity) {
 		this.capacity = capacity;
 		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-//		for(int i = 0; i<this.capacity; i++) {
-//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-//		}
 		initializeBuckets();
 		this.size = 0;
 	}
@@ -97,8 +91,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		if(key==null) return null;
 		
 		//1. Find location of the object (the bucket).
-		int index = this.getKeyIndex(key);
-		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
+		ArrayList<Map.Entry<K,V>> bucket = findBucket(key);
 
 		//2. Iterate through the bucket to find object.
 		Map.Entry<K,V> nodeToRemove = null;
@@ -130,8 +123,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		if(key==null) return null;
 		
 		//1. Find where the object is stored (the bucket).
-		int index = getKeyIndex(key);
-		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
+		ArrayList<Map.Entry<K,V>> bucket = findBucket(key);
 		
 		//2. Iterate the bucket to find 
 		if( bucket.size()>0 ) {
@@ -157,8 +149,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		if(key==null) return false;
 		
 		//1. Find location of object (the bucket).
-		int index = this.getKeyIndex(key);
-		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
+		ArrayList<Map.Entry<K,V>> bucket = findBucket(key);
 		
 		//2. Iterate through the bucket to find object.
 		boolean flag = false;		
@@ -184,7 +175,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public boolean containsValue(Object value) {
 		//0. No safety checks
 		
-		//1. Iterate through the bucket to find object.
+		//1. Iterate through the Map to find object.
 		boolean flag = false;
 		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
 			for(Map.Entry<K,V> node : arraylist) {
@@ -271,7 +262,11 @@ public class MyHashMap<K,V> implements Map<K,V>{
 			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
 		}
 	}
-	
+	private ArrayList<java.util.Map.Entry<K, V>> findBucket(Object key) {
+		int index = this.getKeyIndex(key);
+		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
+		return bucket;
+	}
 	/**
 	 * Compute the array index for a given key. This is done by calling <code>hashcode()</code> on the
 	 * key, and then compressing the hash with <code>%</code> and the map size. 
@@ -323,9 +318,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		this.capacity = 11;
 		this.size = 0;
 		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-//		for(int i = 0; i<this.capacity; i++) {
-//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-//		}
 		initializeBuckets();
 	}
 	
@@ -337,9 +329,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public void clear() {
 		this.size = 0;
 		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-//		for(int i = 0; i<this.capacity; i++) {
-//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-//		}
 		initializeBuckets();
 	}
 	
