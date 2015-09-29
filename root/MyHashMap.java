@@ -22,7 +22,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public MyHashMap() {
 		this.capacity = 11;
 		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		initializeBuckets();
+		initializeBuckets(hashmap);
 		this.size = 0;
 	}
 	
@@ -33,7 +33,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public MyHashMap(int capacity) {
 		this.capacity = capacity;
 		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		initializeBuckets();
+		initializeBuckets(hashmap);
 		this.size = 0;
 	}
 	
@@ -257,9 +257,9 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	/**
 	 * A helper method to initialize the internal structure of this map.
 	 */
-	private void initializeBuckets() {
+	private void initializeBuckets(ArrayList<Map.Entry<K,V>>[] table) {
 		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
+			table[i] = new ArrayList<Map.Entry<K,V>>();
 		}
 	}
 	private ArrayList<java.util.Map.Entry<K, V>> findBucket(Object key) {
@@ -292,10 +292,8 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		
 		//2. Build a new bigger table.
 		ArrayList<Map.Entry<K,V>>[] newTable = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		for(int i = 0; i<this.capacity; i++) {
-			newTable[i] = new ArrayList<Map.Entry<K,V>>();
-		}
-
+		initializeBuckets(newTable);
+		
 		//3. Copy all objects from old table to new table.
 		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
 			if(arraylist.size()>0) {
@@ -318,7 +316,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		this.capacity = 11;
 		this.size = 0;
 		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		initializeBuckets();
+		initializeBuckets(hashmap);
 	}
 	
 	/**
@@ -329,7 +327,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public void clear() {
 		this.size = 0;
 		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		initializeBuckets();
+		initializeBuckets(hashmap);
 	}
 	
 	
