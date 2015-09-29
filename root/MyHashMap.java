@@ -22,9 +22,10 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public MyHashMap() {
 		this.capacity = 11;
 		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-		}
+//		for(int i = 0; i<this.capacity; i++) {
+//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
+//		}
+		initializeBuckets();
 		this.size = 0;
 	}
 	
@@ -35,9 +36,10 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public MyHashMap(int capacity) {
 		this.capacity = capacity;
 		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-		}
+//		for(int i = 0; i<this.capacity; i++) {
+//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
+//		}
+		initializeBuckets();
 		this.size = 0;
 	}
 	
@@ -262,6 +264,15 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	//Helper methods
 	//////////////////////////////
 	/**
+	 * A helper method to initialize the internal structure of this map.
+	 */
+	private void initializeBuckets() {
+		for(int i = 0; i<this.capacity; i++) {
+			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
+		}
+	}
+	
+	/**
 	 * Compute the array index for a given key. This is done by calling <code>hashcode()</code> on the
 	 * key, and then compressing the hash with <code>%</code> and the map size. 
 	 * @param key the unique key an object should be hashed on
@@ -312,9 +323,10 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		this.capacity = 11;
 		this.size = 0;
 		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-		}
+//		for(int i = 0; i<this.capacity; i++) {
+//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
+//		}
+		initializeBuckets();
 	}
 	
 	/**
@@ -325,9 +337,10 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public void clear() {
 		this.size = 0;
 		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
-		}
+//		for(int i = 0; i<this.capacity; i++) {
+//			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
+//		}
+		initializeBuckets();
 	}
 	
 	
