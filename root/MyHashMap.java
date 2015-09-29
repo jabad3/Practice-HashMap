@@ -7,9 +7,9 @@ import java.util.Set;
 import java.util.HashSet;
 import math.Primes;
 
-public class MyHashMap implements Map<Object, Object>{
-	public ArrayList<Map.Entry<?,?>>[] hashmap;
-	public int capacity = 11;
+public class MyHashMap<K,V> implements Map<K,V>{
+	public ArrayList<Map.Entry<K,V>>[] hashmap;
+	public int capacity;
 	public int size;
 	public double loadfactor = 0.5;
 	
@@ -19,11 +19,11 @@ public class MyHashMap implements Map<Object, Object>{
 	/**
 	 * Create a default <code>Map</code> with size capacity 11.
 	 */
-	@SuppressWarnings("unchecked")
 	public MyHashMap() {
-		this.hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[this.capacity];
+		this.capacity = 11;
+		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
 		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<?, ?>>();
+			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
 		}
 		this.size = 0;
 	}
@@ -32,12 +32,11 @@ public class MyHashMap implements Map<Object, Object>{
 	 * Creates a map with a given size capacity.
 	 * @param capacity an integer to determine initial capacity.
 	 */
-	@SuppressWarnings("unchecked")
 	public MyHashMap(int capacity) {
 		this.capacity = capacity;
-		this.hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[this.capacity];
+		this.hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
 		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<?,?>>();
+			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
 		}
 		this.size = 0;
 	}
@@ -54,7 +53,7 @@ public class MyHashMap implements Map<Object, Object>{
 	 * @return if the already exists, the old Value is returned
 	 */
 	@Override
-	public Object put(Object key, Object value) {
+	public V put(K key, V value) {
 		//0. Safety checks.
 		if(key==null) return null;
 		
@@ -62,10 +61,10 @@ public class MyHashMap implements Map<Object, Object>{
 		int index = this.getKeyIndex(key);
 		
 		//2. Check to see if object already exists.
-		Object oldMapping = null;
+		V oldMapping = null;
 		if(this.containsKey(key)) {
 			oldMapping = this.get(key);
-			ArrayList<Map.Entry<?,?>> bucket = hashmap[index];
+			ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
 			bucket.remove(oldMapping);
 			size--;
 		}
@@ -76,7 +75,7 @@ public class MyHashMap implements Map<Object, Object>{
 		}
 		
 		//4. Add the object to the map.
-		Map.Entry<?,?> node = new AbstractMap.SimpleEntry<Object, Object>(key,value);
+		Map.Entry<K,V> node = new AbstractMap.SimpleEntry<K,V>(key,value);
 		hashmap[index].add(node);
 		size++;
 		
@@ -91,18 +90,18 @@ public class MyHashMap implements Map<Object, Object>{
 	 * @return the removed object, or null if it does not exist.
 	 */
 	@Override
-	public Object remove(Object key) {
+	public V remove(Object key) {
 		//0. Safety checks.
 		if(key==null) return null;
 		
-		//1. Find location of object (the bucket).
+		//1. Find location of the object (the bucket).
 		int index = this.getKeyIndex(key);
-		ArrayList<Map.Entry<?,?>> bucket = hashmap[index];
+		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
 
 		//2. Iterate through the bucket to find object.
-		Map.Entry<?,?> nodeToRemove = null;
+		Map.Entry<K,V> nodeToRemove = null;
 		if(bucket.size()>0) {
-			for(Map.Entry<?,?> n : bucket) {
+			for(Map.Entry<K,V> n : bucket) {
 				if(n.getKey()==key) {
 					nodeToRemove = n;
 					break;
@@ -111,9 +110,11 @@ public class MyHashMap implements Map<Object, Object>{
 		}
 		
 		//3. Remove the object from the bucket if it exists.
-		boolean wasRemoved = bucket.remove(nodeToRemove);
-		if(wasRemoved) size--;
-		return nodeToRemove;
+		if(nodeToRemove!=null) {
+			bucket.remove(nodeToRemove);
+			size--;
+			return nodeToRemove.getValue();
+		} else return null;
 	}
 	
 	/**
@@ -122,17 +123,17 @@ public class MyHashMap implements Map<Object, Object>{
 	 * @return the Value object mapped to Key, or null if it does not exist
 	 */
 	@Override
-	public Object get(Object key) {
+	public V get(Object key) {
 		//0. Safety checks.
 		if(key==null) return null;
 		
 		//1. Find where the object is stored (the bucket).
 		int index = getKeyIndex(key);
-		ArrayList<Map.Entry<?,?>> bucket = hashmap[index];
+		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
 		
 		//2. Iterate the bucket to find 
 		if( bucket.size()>0 ) {
-			for(Map.Entry<?,?> n : bucket) {
+			for(Map.Entry<K,V> n : bucket) {
 				if(n.getKey()==key) {
 					return n.getValue();
 				}
@@ -155,12 +156,12 @@ public class MyHashMap implements Map<Object, Object>{
 		
 		//1. Find location of object (the bucket).
 		int index = this.getKeyIndex(key);
-		ArrayList<Map.Entry<?,?>> bucket = hashmap[index];
+		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
 		
 		//2. Iterate through the bucket to find object.
 		boolean flag = false;		
 		if(bucket.size()>0) {
-			for(Map.Entry<?,?> node : bucket) {
+			for(Map.Entry<K,V> node : bucket) {
 				if(node.getKey() == key) {
 					flag = true;
 					break;
@@ -183,8 +184,8 @@ public class MyHashMap implements Map<Object, Object>{
 		
 		//1. Iterate through the bucket to find object.
 		boolean flag = false;
-		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
-			for(Map.Entry<?,?> node : arraylist) {
+		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
+			for(Map.Entry<K,V> node : arraylist) {
 				if(node.getValue().equals(value)) return true; 
 			}
 		}
@@ -202,10 +203,10 @@ public class MyHashMap implements Map<Object, Object>{
 	 * @return a set containing all the existing keys
 	 */
 	@Override
-	public Set<Object> keySet() {
-		Set<Object> set = new HashSet<Object>();
-		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
-			for(Map.Entry<?,?> node : arraylist) {
+	public Set<K> keySet() {
+		Set<K> set = new HashSet<K>();
+		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
+			for(Map.Entry<K,V> node : arraylist) {
 				set.add(node.getKey());
 			}
 		}
@@ -217,12 +218,14 @@ public class MyHashMap implements Map<Object, Object>{
 	 * @return a set containing all existing <code>Map.Entries</code>
 	 */
 	@Override
-	public Set<Map.Entry<Object,Object>> entrySet() {
-		Set<Map.Entry<Object,Object>> set = new HashSet<Map.Entry<Object,Object>>();
-		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
-			for(Map.Entry<?,?> node : arraylist) {
-				Map.Entry<Object, Object> entry = new AbstractMap.SimpleEntry<Object,Object>(node.getKey(), node.getValue());
-				set.add(entry);
+	public Set<Map.Entry<K,V>> entrySet() {
+		Set<Map.Entry<K,V>> set = new HashSet<Map.Entry<K,V>>();
+		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
+			for(Map.Entry<K,V> node : arraylist) {
+				//Map.Entry<K, V> entry = new AbstractMap.SimpleEntry<K,V>(node.getKey(), node.getValue());
+				//set.add(entry);
+				//set.add(new AbstractMap.SimpleEntry<K,V>(node.getKey(), node.getValue()));
+				set.add(node);
 			}
 		}
 		return set;
@@ -233,10 +236,10 @@ public class MyHashMap implements Map<Object, Object>{
 	 * @return a set containing all existing entries
 	 */
 	@Override
-	public Collection<Object> values() {
-		Collection<Object> set = new HashSet<Object>();
-		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
-			for(Map.Entry<?,?> node : arraylist) {
+	public Collection<V> values() {
+		Collection<V> set = new HashSet<V>();
+		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
+			for(Map.Entry<K,V> node : arraylist) {
 				set.add(node.getValue());
 			}
 		}
@@ -248,10 +251,10 @@ public class MyHashMap implements Map<Object, Object>{
 	 * @param m the <code>Map</code> from which entries will be extracted
 	 */
 	@Override
-	public void putAll(Map<?,?> m) {
+	public void putAll(Map<? extends K,? extends V> m) {
 		Set<?> set = m.entrySet();
 		for(Object node : set) {
-			Map.Entry<?,?> temp = (Map.Entry<?,?>) node;
+			Map.Entry<K,V> temp = (Map.Entry<K,V>) node;
 			this.put(temp.getKey(), temp.getValue());
 			size++;
 		}
@@ -270,8 +273,8 @@ public class MyHashMap implements Map<Object, Object>{
 	private int getKeyIndex(Object key) {
 		int hashcode = key.hashCode();
 		int compressIndex = hashcode % capacity;
-		int index = Math.abs(compressIndex);
-		return index;
+		//int index = Math.abs(compressIndex);
+		return compressIndex;
 	}
 	
 	/**
@@ -283,57 +286,54 @@ public class MyHashMap implements Map<Object, Object>{
 		//1. Calculate new table size.
 		int doubleTableCapacity = this.getCapacity() * 2;
 		int newTableCapacity = Primes.findNextPrime(doubleTableCapacity);
+		this.capacity = newTableCapacity;
 		
 		//2. Build a new bigger table.
-		@SuppressWarnings("unchecked")
-		ArrayList<Map.Entry<?,?>>[] newTable = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[newTableCapacity];
-		for(int i = 0; i<newTableCapacity; i++) {
-			newTable[i] = new ArrayList<Map.Entry<?,?>>();
+		ArrayList<Map.Entry<K,V>>[] newTable = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
+		for(int i = 0; i<this.capacity; i++) {
+			newTable[i] = new ArrayList<Map.Entry<K,V>>();
 		}
 
 		//3. Copy all objects from old table to new table.
-		for(ArrayList<Map.Entry<?,?>> arraylist : hashmap) {
+		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
 			if(arraylist.size()>0) {
-				for(Map.Entry<?,?> node : arraylist) {
-					int hashcode = (node.getKey()).hashCode();
-					int compressIndex = hashcode % newTableCapacity;
-					int index = Math.abs(compressIndex);
-					newTable[index].add(node);
+				for(Map.Entry<K,V> node : arraylist) {
+					//int newIndex = getKeyIndex(node.getKey(), newTableCapacity);
+					int newIndex = getKeyIndex(node.getKey());
+					newTable[newIndex].add(node);
 				}
 			}
 		}
 		
 		//4. Replace old table with new table.
 		hashmap = newTable;
-		this.capacity = newTableCapacity;
+		//this.capacity = newTableCapacity;
 		//System.out.println("Resize performed");
 	}
 	
 	/**
 	 * Reset the map to its original state, a map that is empty and with a capacity of 11.
 	 */
-	@SuppressWarnings("unchecked")
 	public void reset() {
-		hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[11];
-		for(int i = 0; i<11; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<?,?>>();
+		this.capacity = 11;
+		this.size = 0;
+		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
+		for(int i = 0; i<this.capacity; i++) {
+			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
 		}
-		size = 0;
-		capacity = 11;
 	}
 	
 	/**
 	 * Remove all entries from the map. The map's capacity remains unchanged so that if the map has been resized,
 	 * the map does not return back to its default size.
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
 	public void clear() {
-		hashmap = (ArrayList<Map.Entry<?,?>>[]) new ArrayList[this.capacity];
+		this.size = 0;
+		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
 		for(int i = 0; i<this.capacity; i++) {
-			hashmap[i] = new ArrayList<Map.Entry<?,?>>();
+			hashmap[i] = new ArrayList<Map.Entry<K,V>>();
 		}
-		size = 0;
 	}
 	
 	
@@ -371,7 +371,7 @@ public class MyHashMap implements Map<Object, Object>{
 	 * Returns an <code>ArrayList</code> that is used as the underlying structure of the map. 
 	 * @return an <code>ArrayList</code> representing this map.
 	 */
-	public ArrayList<Map.Entry<?,?>>[] getArray() {
+	public ArrayList<Map.Entry<K,V>>[] getArray() {
 		return hashmap;
 	}
 	
@@ -383,9 +383,7 @@ public class MyHashMap implements Map<Object, Object>{
 		//System.out.println(Arrays.toString(hashmap));
 		//return Arrays.toString(hashmap);
 		return entrySet().toString();
-	}
-	
-	
+	}	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

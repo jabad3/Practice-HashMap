@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Arrays;
@@ -43,15 +44,15 @@ public class MyHashMapTests {
 	}
 	@Test
 	public void testClear1() {
-		map = new MyHashMap();
+		map = new MyHashMap<Integer, String>();
 		map.hashmap[0].add(new AbstractMap.SimpleEntry(0,"0"));
 		map.hashmap[1].add(new AbstractMap.SimpleEntry(1,"1"));
 		map.hashmap[2].add(new AbstractMap.SimpleEntry(2,"2"));
 		map.size = 3;
 		assertEquals("", 3, map.size());
-		assertEquals("", "0", map.hashmap[0].get(0).getValue());
-		assertEquals("", "1", map.hashmap[1].get(0).getValue());
-		assertEquals("", "2", map.hashmap[2].get(0).getValue());
+		assertEquals("", "0", ((SimpleEntry) map.hashmap[0].get(0)).getValue());
+		assertEquals("", "1", ((SimpleEntry) map.hashmap[1].get(0)).getValue());
+		assertEquals("", "2", ((SimpleEntry) map.hashmap[2].get(0)).getValue());
 		map.clear();
 		assertEquals("", 0, map.size());
 		assertEquals("", new ArrayList<Node>(), map.hashmap[0]);
