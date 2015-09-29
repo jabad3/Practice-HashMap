@@ -7,11 +7,16 @@ import java.util.Set;
 import java.util.HashSet;
 import math.Primes;
 
+/**
+ * <code>MyHashMap</code> is a data-structure I created to mimic the java.util.HashTable<K,V> class. It behaves in 
+ * the same manner, and allows for the mapping of key-value pairs.
+ * @author Joseph Abad
+ */
 public class MyHashMap<K,V> implements Map<K,V>{
-	public ArrayList<Map.Entry<K,V>>[] hashmap;
-	public int capacity;
-	public int size;
-	public double loadfactor = 0.5;
+	private ArrayList<Map.Entry<K,V>>[] hashmap;
+	private int capacity;
+	private int size;
+	private double loadfactor = 0.5;
 	
 	//////////////////////////////
 	//Constructors
@@ -284,7 +289,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	 * rounded to the next prime number (Ex. a map of size 5 is resized to a new size of 11). The existing 
 	 * entries are rehashed and inserted into the new array.
 	 */
-	public void resize() {
+	private void resize() {
 		//1. Calculate new table size.
 		int doubleTableCapacity = this.getCapacity() * 2;
 		int newTableCapacity = Primes.findNextPrime(doubleTableCapacity);
@@ -308,15 +313,28 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		hashmap = newTable;
 		//System.out.println("Resize performed");
 	}
+		
+	
+	//////////////////////////////
+	//Standard structure methods
+	//////////////////////////////
+	/**
+	 * Returns <code>true</code> if the map's size is <code>0</code>, or <code>false</code> if size is 
+	 * greater than <code>0</code>.
+	 * @return a boolean that states if the map is empty
+	 */
+	@Override
+	public boolean isEmpty() {
+		return this.size==0;
+	}
 	
 	/**
-	 * Reset the map to its original state, a map that is empty and with a capacity of 11.
+	 * Returns the number of entries in the map.
+	 * @return the number of entries in the map
 	 */
-	public void reset() {
-		this.capacity = 11;
-		this.size = 0;
-		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		initializeBuckets(hashmap);
+	@Override
+	public int size() {
+		return this.size;
 	}
 	
 	/**
@@ -330,45 +348,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		initializeBuckets(hashmap);
 	}
 	
-	
-	//////////////////////////////
-	//Standard structure methods
-	//////////////////////////////
-	/**
-	 * Returns the number of entries in the map.
-	 * @return the number of entries in the map
-	 */
-	@Override
-	public int size() {
-		return this.size;
-	}
-	
-	/**
-	 * Returns the current capacity of the map. This is, the amount of buckets it contains.
-	 * @return the capacity of the map
-	 */
-	public int getCapacity() {
-		return this.capacity;
-	}
-	
-	/**
-	 * Returns <code>true</code> if the map's size is <code>0</code>, or <code>false</code> if size is 
-	 * greater than <code>0</code>.
-	 * @return a boolean that states if the map is empty
-	 */
-	@Override
-	public boolean isEmpty() {
-		return this.size==0;
-	}
-	
-	/**
-	 * Returns an <code>ArrayList</code> that is used as the underlying structure of the map. 
-	 * @return an <code>ArrayList</code> representing this map.
-	 */
-	public ArrayList<Map.Entry<K,V>>[] getArray() {
-		return hashmap;
-	}
-	
 	/**
 	 * Returns a <code>String</code> representation of this map.
 	 */
@@ -376,6 +355,35 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public String toString() {
 		return entrySet().toString();
 	}	
+	
+	
+	//////////////////////////////
+	//For Testing Use
+	//////////////////////////////
+	/**
+	 * Reset the map to its original state, a map that is empty and with a capacity of 11.
+	 */
+	private void reset() {
+		this.capacity = 11;
+		this.size = 0;
+		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
+		initializeBuckets(hashmap);
+	}
+	
+	/**
+	 * Returns the current capacity of the map. This is, the amount of buckets it contains.
+	 * @return the capacity of the map
+	 */
+	private int getCapacity() {
+		return this.capacity;
+	}
+	/**
+	 * Returns an <code>ArrayList</code> that is used as the underlying structure of the map. 
+	 * @return an <code>ArrayList</code> representing this map.
+	 */
+	private ArrayList<Map.Entry<K,V>>[] getArray() {
+		return hashmap;
+	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
