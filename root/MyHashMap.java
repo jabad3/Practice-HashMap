@@ -222,9 +222,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		Set<Map.Entry<K,V>> set = new HashSet<Map.Entry<K,V>>();
 		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
 			for(Map.Entry<K,V> node : arraylist) {
-				//Map.Entry<K, V> entry = new AbstractMap.SimpleEntry<K,V>(node.getKey(), node.getValue());
-				//set.add(entry);
-				//set.add(new AbstractMap.SimpleEntry<K,V>(node.getKey(), node.getValue()));
 				set.add(node);
 			}
 		}
@@ -273,7 +270,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	private int getKeyIndex(Object key) {
 		int hashcode = key.hashCode();
 		int compressIndex = hashcode % capacity;
-		//int index = Math.abs(compressIndex);
 		return compressIndex;
 	}
 	
@@ -298,7 +294,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
 			if(arraylist.size()>0) {
 				for(Map.Entry<K,V> node : arraylist) {
-					//int newIndex = getKeyIndex(node.getKey(), newTableCapacity);
 					int newIndex = getKeyIndex(node.getKey());
 					newTable[newIndex].add(node);
 				}
@@ -307,7 +302,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		
 		//4. Replace old table with new table.
 		hashmap = newTable;
-		//this.capacity = newTableCapacity;
 		//System.out.println("Resize performed");
 	}
 	
@@ -380,8 +374,6 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	 */
 	@Override
 	public String toString() {
-		//System.out.println(Arrays.toString(hashmap));
-		//return Arrays.toString(hashmap);
 		return entrySet().toString();
 	}	
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
