@@ -7,17 +7,18 @@ import java.util.Set;
 import java.util.HashSet;
 import math.Primes;
 
+
 /**
  * <code>MyHashMap</code> is a data-structure I created to mimic the java.util.HashTable<K,V> class. It behaves in 
  * the same manner, and allows for the mapping of key-value pairs.
  * @author Joseph Abad
  */
 public class MyHashMap<K,V> implements Map<K,V>{
-	private ArrayList<Map.Entry<K,V>>[] hashmap;
 	private int capacity;
 	private int size;
 	private double loadfactor = 0.5;
-	
+	private ArrayList<Map.Entry<K,V>>[] hashmap;
+
 	//////////////////////////////
 	//Constructors
 	//////////////////////////////
@@ -59,12 +60,12 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		if(key==null) return null;
 		
 		//1. Compute the index using hashcode and compression.
-		int index = this.getKeyIndex(key);
+		int index = this.getArrayIndexFromKey(key);
 		
 		//2. Check to see if object already exists.
-		V oldMapping = null;
+		Map.Entry<K,V> oldMapping = null;
 		if(this.containsKey(key)) {
-			oldMapping = this.get(key);
+			oldMapping = this.get(key, true);
 			ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
 			bucket.remove(oldMapping);
 			size--;
@@ -80,8 +81,8 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		hashmap[index].add(node);
 		size++;
 		
-		//System.out.println("Adding at index: "+index);
-		return oldMapping;
+		if(oldMapping==null) return null;
+		else return oldMapping.getValue();
 	}
 	
 	/**
@@ -94,10 +95,10 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	public V remove(Object key) {
 		//0. Safety checks.
 		if(key==null) return null;
-		
+				
 		//1. Find location of the object (the bucket).
 		ArrayList<Map.Entry<K,V>> bucket = findBucket(key);
-
+		
 		//2. Iterate through the bucket to find object.
 		Map.Entry<K,V> nodeToRemove = null;
 		if(bucket.size()>0) {
@@ -135,6 +136,33 @@ public class MyHashMap<K,V> implements Map<K,V>{
 			for(Map.Entry<K,V> n : bucket) {
 				if(n.getKey()==key) {
 					return n.getValue();
+				}
+			}
+		}
+		
+		//3. Return null if the object is not found.
+		return null;
+	}
+	
+	/**
+	 * Privately overloaded <code>get()</code> so that I return a <code>Map.Entry</code> instead of a V object.
+	 * @param key key to check
+	 * @param flag flag, if set to true, return an entry, not a V
+	 * @return an entry mapped to the K object
+	 */
+	private Map.Entry<K,V> get(Object key, boolean flag) {
+		//0. Safety checks.
+		if(key==null) return null;
+		if(flag==false) return null;
+		
+		//1. Find where the object is stored (the bucket).
+		ArrayList<Map.Entry<K,V>> bucket = findBucket(key);
+		
+		//2. Iterate the bucket to find 
+		if( bucket.size()>0 ) {
+			for(Map.Entry<K,V> n : bucket) {
+				if(n.getKey()==key) {
+					return n;
 				}
 			}
 		}
@@ -268,7 +296,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		}
 	}
 	private ArrayList<java.util.Map.Entry<K, V>> findBucket(Object key) {
-		int index = this.getKeyIndex(key);
+		int index = this.getArrayIndexFromKey(key);
 		ArrayList<Map.Entry<K,V>> bucket = hashmap[index];
 		return bucket;
 	}
@@ -278,12 +306,11 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	 * @param key the unique key an object should be hashed on
 	 * @return an integer between <code>0</code> and <code>map.size-1</code>
 	 */
-	private int getKeyIndex(Object key) {
+	private int getArrayIndexFromKey(Object key) {
 		int hashcode = key.hashCode();
 		int compressIndex = hashcode % capacity;
 		return compressIndex;
 	}
-	
 	/**
 	 * Helper method to resize a map to a larger size. A new array is created that is double the current size 
 	 * rounded to the next prime number (Ex. a map of size 5 is resized to a new size of 11). The existing 
@@ -303,7 +330,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		for(ArrayList<Map.Entry<K,V>> arraylist : hashmap) {
 			if(arraylist.size()>0) {
 				for(Map.Entry<K,V> node : arraylist) {
-					int newIndex = getKeyIndex(node.getKey());
+					int newIndex = getArrayIndexFromKey(node.getKey());
 					newTable[newIndex].add(node);
 				}
 			}
@@ -311,9 +338,8 @@ public class MyHashMap<K,V> implements Map<K,V>{
 		
 		//4. Replace old table with new table.
 		hashmap = newTable;
-		//System.out.println("Resize performed");
 	}
-		
+	
 	
 	//////////////////////////////
 	//Standard structure methods
@@ -354,28 +380,37 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	@Override
 	public String toString() {
 		return entrySet().toString();
-	}	
-	
-	
-	//////////////////////////////
-	//For Testing Use
-	//////////////////////////////
-	/**
-	 * Reset the map to its original state, a map that is empty and with a capacity of 11.
-	 */
-	private void reset() {
-		this.capacity = 11;
-		this.size = 0;
-		hashmap = (ArrayList<Map.Entry<K,V>>[]) new ArrayList[this.capacity];
-		initializeBuckets(hashmap);
 	}
 	
+	/**
+	 * Returns Two Maps are equal if they are of the same size and have the same entries
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) return false;
+		if (this == obj) return true;
+		if (getClass() != obj.getClass()) return false;
+    	if(!(obj instanceof MyHashMap)) return false;
+
+    	MyHashMap other = (MyHashMap) obj;
+		if (this.size != other.size) return false;
+		else if( !(this.entrySet()).equals(other.entrySet()) ) return false;
+		return true;
+	}
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	//F O R     T E S T I N G     U S E     O N L Y
 	/**
 	 * Returns the current capacity of the map. This is, the amount of buckets it contains.
 	 * @return the capacity of the map
 	 */
 	private int getCapacity() {
 		return this.capacity;
+	}
+	private double getLoadFactor() {
+		return this.loadfactor;
 	}
 	/**
 	 * Returns an <code>ArrayList</code> that is used as the underlying structure of the map. 
@@ -384,6 +419,7 @@ public class MyHashMap<K,V> implements Map<K,V>{
 	private ArrayList<Map.Entry<K,V>>[] getArray() {
 		return hashmap;
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////
 }
