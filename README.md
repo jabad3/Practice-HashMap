@@ -1,2 +1,2 @@
 # Practice-HashMap
-An implementation of HashMap in java.
+My implementation of java.util.HashMap.
