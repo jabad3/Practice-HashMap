@@ -1,5 +1,10 @@
 package tests;
 
+/**
+ * <code>Node</code> is a simple object I created to test the <code>MyHashTable(K,V)</code> class. It behaves
+ * somewhat like a KeyValue pair object.
+ * @author Joseph Abad
+ */
 public class Node {
 	public int id;
 	public String data;
